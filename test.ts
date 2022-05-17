@@ -1,3 +1,5 @@
+// Testando umas coisas
+
 type GetFunctionInfo<F extends Function> = F extends ((...args: infer A) => infer R) ? [A, R] : never;
 
 export const memoize = <T extends Function>(fn: T) => {
