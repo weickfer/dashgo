@@ -4,10 +4,10 @@ import { PaginationButton } from './PaginationButton'
 export function Pagination() {
   return (
     <Stack
-      direction="row"
+      direction={["column", "row"]}
       spacing="6"
       marginTop="8"
-      alignItems="center"
+      alignItems={["flex-start", "center"]}
       justifyContent="space-between"
     >
       <Box>

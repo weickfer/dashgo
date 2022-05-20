@@ -32,11 +32,9 @@ export function Header() {
             icon={<Icon as={RiMenuLine} />}
             fontSize="24"
             variant="unstyled"
-            onClick={() => {
-              alert('Open Drawer Navigation')
-              onOpen()
-            }}
+            onClick={onOpen}
             marginRight="2"
+            display="flex"
           >
 
           </IconButton>

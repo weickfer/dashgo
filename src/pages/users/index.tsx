@@ -1,11 +1,17 @@
-import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import NextLink from 'next/link'
+import { Box, Button, IconButton, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
-import { SideBar } from "../../components/SideBar";
+import { SideBar } from "../../components/Sidebar";
 
 export default function UserList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
+
   return (
     <Box>
       <Header />
@@ -23,52 +29,69 @@ export default function UserList() {
           <Flex marginBottom="8" alignItems="center" justifyContent="space-between" >
             <Heading size="lg" fontWeight="normal">Usuários</Heading>
 
-            <Button
-              as="a"
-              size="sm"
-              fontSize="sm"
-              colorScheme="pink"
-              fontWeight="normal"
-              leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-            >
-              Criar novo
-            </Button>
+            <NextLink href="/users/create" passHref>
+              <Button
+                as="a"
+                size="sm"
+                fontSize="sm"
+                colorScheme="pink"
+                fontWeight="normal"
+                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+              >
+                Criar novo
+              </Button>
+            </NextLink>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
             <Thead>
               <Tr>
-                <Th paddingX="6" color="gray.300" width="8">
+                <Th paddingX={["4", "4", "6"]} color="gray.300" width="8">
                   <Checkbox colorScheme="pink" />
                 </Th>
                 <Th>Usuário</Th>
-                <Th>Data de cadastro</Th>
+                {isWideVersion && <Th>Data de cadastro</Th>}
                 <Th width="8"></Th>
               </Tr>
             </Thead>
             <Tbody>
               <Tr>
-                <Td paddingX="6">
+                <Td paddingX={["4", "4", "6"]}>
                   <Checkbox colorScheme="pink" />
                 </Td>
                 <Td>
                   <Box>
-                    <Text fontWeight="bold">Weickmam Ferreira</Text>
+                    <Text fontWeight="bold" noOfLines={1}>Weickmam Ferreira</Text>
                     <Text fontSize="sm" color="gray.300">weickmam@mail.io</Text>
                   </Box>
                 </Td>
-                <Td>07 de Maio, 2022</Td>
+                {isWideVersion && <Td>07 de Maio, 2022</Td>}
                 <Td>
-                <Button
-                  as="a"
-                  size="sm"
-                  fontSize="sm"
-                  colorScheme="purple"
-                  fontWeight="normal"
-                  leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                >
-                  Editar
-                </Button>
+                  {
+                    isWideVersion ? (
+                      <Button
+                        as="a"
+                        size="sm"
+                        fontSize="sm"
+                        colorScheme="purple"
+                        fontWeight="normal"
+                        leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                      >
+                        Editar
+                      </Button>
+                    )
+                      : (
+                        <IconButton
+                          aria-label="Edit"
+                          as="a"
+                          size="sm"
+                          fontSize="sm"
+                          colorScheme="purple"
+                          fontWeight="normal"
+                          icon={<Icon as={RiPencilLine} fontSize="16" />}
+                        />
+                      )
+                  }
                 </Td>
               </Tr>
             </Tbody>
