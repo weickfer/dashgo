@@ -7,6 +7,9 @@ import { Box, Button, Divider, Flex, Heading, Stack, SimpleGrid } from "@chakra-
 import { Input } from "../../components/Form/Input";
 import { Header } from "../../components/Header";
 import { SideBar } from "../../components/Sidebar";
+import { useMutation } from 'react-query';
+import { api } from '../../services/api';
+import { queryClient } from '../../services/query';
 
 type CreateUserFormData = {
   name: string;
@@ -17,10 +20,10 @@ type CreateUserFormData = {
 
 /*
 .min(8, 'Sua senha tem que ter no mínimo 8 caracteres.')
-  .matches(/[a-z]/, 'Sua senha deve conter pelo menos uma letra minúscula.')
-  .matches(/[A-Z]/, 'Sua senha deve conter pelo menos uma letra maiúscula.')
-  .matches(/[0-9]/, 'Sua senha deve conter pelo menos um número.')
-  .matches(/[^a-zA-Z0-9]/, 'Sua senha deve conter pelo menos um carácter especial.')
+.matches(/[A-Z]/, 'Sua senha deve conter pelo menos uma letra maiúscula.')
+.matches(/[0-9]/, 'Sua senha deve conter pelo menos um número.')
+.matches(/[^a-zA-Z0-9]/, 'Sua senha deve conter pelo menos um carácter especial.')
+.matches(/[a-z]/, 'Sua senha deve conter pelo menos uma letra minúscula.')
 */
 
 const createUserFormSchema = yup.object().shape({
@@ -36,15 +39,29 @@ const createUserFormSchema = yup.object().shape({
 })
 
 export default function UserList() {
+  const createUser = useMutation(async (user: CreateUserFormData) => {
+    const response = await api.post('users', {
+      user: {
+        ...user,
+        created_at: new Date()
+      }
+    })
+
+    return response.data
+  }, {
+    onSuccess() {
+      queryClient.invalidateQueries('users:list')
+    }
+  })
   const { register, formState, handleSubmit } = useForm({
     resolver: yupResolver(createUserFormSchema)
   })
   const { errors } = formState
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (data) => {
-    await new Promise(resolve => setTimeout(resolve, 2 * 1000))
+    await new Promise(resolve => setTimeout(resolve, 0.5 * 1000))
 
-    console.log(data)
+    await createUser.mutateAsync(data)
   }
 
   return (

@@ -1,31 +1,34 @@
-// Testando umas coisas
+// type Mapper<T, V> = {
+//   [P in keyof T]: V
+// }
 
-type GetFunctionInfo<F extends Function> = F extends ((...args: infer A) => infer R) ? [A, R] : never;
+// interface Yup {
+//   object(): this
+//   shape<T>(schema: Mapper<T, this>): this
+//   required(message?: string): this
+//   email(message?: string): this
+//   string(message?: string): this
+//   min(value?: number, message?: string): this
+//   max(value?: number, message?: string): this
+// }
 
-export const memoize = <T extends Function>(fn: T) => {
-  const cache = {};
-  return (...args: GetFunctionInfo<T>['0']): GetFunctionInfo<T>['1'] => {
-    const key = JSON.stringify(args);
-    if (cache[key]) {
-      return cache[key];
-    }
-    const result = Promise.resolve(fn(...args));
+// let yup: Yup
 
-    return new Promise(resolve => {
-      result.then(value => {
-        cache[key] = value;
-        resolve(value);
-      });
-    })
-  }
-}
+// type SchemaType = {
+//   email: string
+//   password: string
+// }
 
-function sayHello(name: string) {
-  // await new Promise(resolve => setTimeout(resolve, 1000));
+// const schema = yup.object().shape<SchemaType>({
+//   email: yup.string().email(),
+//   password: yup.string().min(8)
+// })
 
-  return `Hello ${name}`;
-}
+// type AxiosArgs = [data: string, config?: {
+//   headers?: Record<string, string>
+// }]
 
-const sayHelloMemoized = memoize(sayHello);
+// type Axios = (...args: AxiosArgs) => void
 
-console.log(sayHelloMemoized('John'));
+// let axios: Axios
+
